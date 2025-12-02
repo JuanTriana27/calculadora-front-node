@@ -47,7 +47,7 @@ export class HistorialComponent implements OnInit {
         this.isLoading = true;
         this.error = null;
 
-        const apiUrl = 'http://localhost:3000/api/historial';
+        const apiUrl = 'https://calcnodeback.onrender.com/api/historial';
 
         this.http.get<HistorialItem[]>(apiUrl).subscribe({
             next: (data) => {
