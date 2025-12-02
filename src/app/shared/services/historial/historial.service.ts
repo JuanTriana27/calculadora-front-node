@@ -19,7 +19,8 @@ export interface HistorialItem {
     providedIn: 'root'
 })
 export class HistorialService {
-    private apiUrl = `${environment.apiUrl}/historial`; // ← Cambia esta línea
+    private apiUrl = 'https://calcnodeback.onrender.com/api/historial';
+    //private apiUrl = `${environment.apiUrl}/historial`;
 
     constructor(private http: HttpClient) {
         console.log('Environment production:', environment.production);
