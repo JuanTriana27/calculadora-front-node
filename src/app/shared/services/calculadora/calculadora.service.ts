@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface OperacionRequest {
     expresion: string;
@@ -11,7 +12,6 @@ export interface OperacionResponse {
     resultado: number;
     expresion?: string;
     tipo?: string;
-    // Propiedades para uso local en el componente
     timestamp?: string;
     expresionMostrar?: string;
 }
@@ -20,10 +20,11 @@ export interface OperacionResponse {
     providedIn: 'root'
 })
 export class CalculadoraService {
-    private baseUrl = 'http://localhost:3000/api/calc';
+    private baseUrl = `${environment.apiUrl}/calc`; // ← Cambia esta línea
 
     constructor(private http: HttpClient) { }
 
+    // ... el resto de tu código permanece igual
     operar(expresion: string): Observable<OperacionResponse> {
         const body: OperacionRequest = { expresion };
         return this.http.post<OperacionResponse>(`${this.baseUrl}/operar`, body)

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface HistorialItem {
     _id: string;
@@ -18,12 +19,11 @@ export interface HistorialItem {
     providedIn: 'root'
 })
 export class HistorialService {
-    // Cambia esto según tu entorno
-    private apiUrl = 'http://localhost:3000/api/historial';
+    private apiUrl = `${environment.apiUrl}/historial`; // ← Cambia esta línea
 
     constructor(private http: HttpClient) { }
 
-    // Método para obtener la URL (para depuración)
+    // ... el resto de tu código permanece igual
     getApiUrl(): string {
         return this.apiUrl;
     }
@@ -47,10 +47,8 @@ export class HistorialService {
         console.error('Error completo:', error);
 
         if (error.error instanceof ErrorEvent) {
-            // Error del cliente
             errorMessage = `Error del cliente: ${error.error.message}`;
         } else {
-            // Error del servidor
             errorMessage = `Error ${error.status}: ${error.message}`;
             if (error.status === 0) {
                 errorMessage = 'No se puede conectar con el servidor. Verifica que esté corriendo.';
