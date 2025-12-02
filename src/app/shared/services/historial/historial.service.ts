@@ -21,7 +21,10 @@ export interface HistorialItem {
 export class HistorialService {
     private apiUrl = `${environment.apiUrl}/historial`; // ← Cambia esta línea
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        console.log('Environment production:', environment.production);
+        console.log('API URL:', environment.apiUrl);
+    }
 
     // ... el resto de tu código permanece igual
     getApiUrl(): string {
