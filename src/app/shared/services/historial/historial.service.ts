@@ -23,43 +23,54 @@ export class HistorialService {
     //private apiUrl = `${environment.apiUrl}/historial`;
 
     constructor(private http: HttpClient) {
-        console.log('Environment production:', environment.production);
-        console.log('API URL:', environment.apiUrl);
+        console.log('HistorialService - Environment production:', environment.production);
+        console.log('HistorialService - Environment API URL:', environment.apiUrl);
+        console.log('HistorialService - URL final:', this.apiUrl);
     }
 
-    // ... el resto de tu código permanece igual
     getApiUrl(): string {
         return this.apiUrl;
     }
 
     getHistorial(): Observable<HistorialItem[]> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
+        console.log('🔍 getHistorial() llamado. URL:', this.apiUrl);
 
-        console.log('Haciendo petición a:', this.apiUrl);
+        // QUITA los headers por ahora - pueden causar preflight CORS
+        // const headers = new HttpHeaders({
+        //     'Content-Type': 'application/json'
+        // });
 
-        return this.http.get<HistorialItem[]>(this.apiUrl, { headers }).pipe(
-            tap(data => console.log('Respuesta recibida:', data)),
+        console.log('📤 Haciendo petición GET a:', this.apiUrl);
+
+        return this.http.get<HistorialItem[]>(this.apiUrl).pipe(
+            tap(data => {
+                console.log('✅ Respuesta recibida del historial:', data);
+                console.log('✅ Cantidad de registros:', data.length);
+            }),
             catchError(this.handleError)
         );
     }
 
     private handleError(error: HttpErrorResponse) {
-        let errorMessage = 'Error al cargar el historial';
+        console.error('❌ HistorialService - Error completo:', error);
+        console.error('❌ Error URL:', error.url);
+        console.error('❌ Error status:', error.status);
+        console.error('❌ Error message:', error.message);
+        console.error('❌ Error name:', error.name);
 
-        console.error('Error completo:', error);
+        let errorMessage = 'Error al cargar el historial';
 
         if (error.error instanceof ErrorEvent) {
             errorMessage = `Error del cliente: ${error.error.message}`;
         } else {
-            errorMessage = `Error ${error.status}: ${error.message}`;
             if (error.status === 0) {
                 errorMessage = 'No se puede conectar con el servidor. Verifica que esté corriendo.';
+            } else {
+                errorMessage = `Error ${error.status}: ${error.message}`;
             }
         }
 
-        console.error(errorMessage);
+        console.error('❌ ErrorMessage final:', errorMessage);
         return throwError(() => new Error(errorMessage));
     }
 }
