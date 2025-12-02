@@ -1,0 +1,459 @@
+// Variables de color minimalistas
+$color-primario: #3a86ff; // Azul moderno
+$color-secundario: #8338ec; // Púrpura elegante
+$color-fondo: #ffffff; // Blanco
+$color-texto: #2d3748; // Gris oscuro
+$color-texto-claro: #718096; // Gris medio
+$color-borde: #e2e8f0; // Gris claro
+$color-hover: #f7fafc; // Gris muy claro para hover
+$color-operador: #ff006e; // Rosa para operadores
+$color-igual: #fb5607; // Naranja para igual
+$color-funcion: #8ac926; // Verde para funciones
+
+// Funciones para manejar colores
+@function oscurecer($color, $porcentaje) {
+    @return mix(#000, $color, $porcentaje);
+}
+
+@function aclarar($color, $porcentaje) {
+    @return mix(#fff, $color, $porcentaje);
+}
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin transition($prop: all) {
+    transition: $prop 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@mixin shadow-sm {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@mixin shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@mixin shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+// Container principal
+.calculadora-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 24px;
+    background: $color-fondo;
+    border-radius: 24px;
+    @include shadow-lg();
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+    @media (max-width: 480px) {
+        padding: 20px;
+        border-radius: 20px;
+        max-width: 100%;
+    }
+}
+
+// Header
+.calculadora-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid $color-borde;
+
+    .header-left {
+        .calculadora-titulo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: $color-texto;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            i {
+                color: $color-primario;
+                font-size: 1.4rem;
+            }
+        }
+    }
+
+    .header-right {
+        .btn-historial {
+            @include flex-center();
+            gap: 8px;
+            padding: 10px 16px;
+            background: $color-fondo;
+            border: 2px solid $color-primario;
+            border-radius: 12px;
+            color: $color-primario;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            @include transition();
+
+            &:hover {
+                background: $color-primario;
+                color: white;
+                transform: translateY(-1px);
+                @include shadow-md();
+            }
+
+            .btn-text {
+                @media (max-width: 480px) {
+                    display: none;
+                }
+            }
+
+            i {
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
+// Pantalla
+.pantalla-container {
+    background: $color-hover;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 28px;
+    position: relative;
+    min-height: 120px;
+    overflow: hidden;
+
+    .pantalla-expresion {
+        font-size: 1.1rem;
+        color: $color-texto-claro;
+        margin-bottom: 8px;
+        min-height: 24px;
+        word-break: break-all;
+        font-weight: 500;
+
+        &.error {
+            color: $color-operador;
+        }
+    }
+
+    .pantalla-resultado {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: $color-texto;
+        line-height: 1;
+        word-break: break-all;
+        text-align: right;
+
+        &.error {
+            color: $color-operador;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 2.2rem;
+        }
+    }
+
+    // Estados
+    .estado-calculando,
+    .estado-error {
+        position: absolute;
+        top: 16px;
+        left: 24px;
+        @include flex-center();
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        @include shadow-sm();
+
+        i {
+            font-size: 0.9rem;
+        }
+    }
+
+    .estado-calculando {
+        color: $color-primario;
+    }
+
+    .estado-error {
+        color: $color-operador;
+    }
+}
+
+// Teclado
+.teclado {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+
+    .fila {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+
+        @media (max-width: 480px) {
+            gap: 10px;
+        }
+    }
+
+    .tecla {
+        @include flex-center();
+        height: 68px;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        @include transition();
+        user-select: none;
+        position: relative;
+        overflow: hidden;
+
+        // Efecto de presión
+        &:active {
+            transform: scale(0.95);
+        }
+
+        // Efecto de ripple
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        &:active::after {
+            width: 150px;
+            height: 150px;
+        }
+
+        .tecla-texto {
+            font-size: 1.4rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+
+            @media (max-width: 480px) {
+                font-size: 1.2rem;
+            }
+        }
+
+        i {
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        // Tipos de teclas
+        &.tecla-numero {
+            background: $color-fondo;
+            color: $color-texto;
+            border: 2px solid $color-borde;
+
+            &:hover {
+                background: $color-hover;
+                border-color: aclarar($color-borde, 30%);
+                @include shadow-md();
+            }
+
+            &.tecla-cero {
+                grid-column: span 2;
+            }
+        }
+
+        &.tecla-operador {
+            background: $color-operador;
+            color: white;
+
+            &:hover {
+                background: oscurecer($color-operador, 10%);
+                @include shadow-md();
+            }
+
+            &.tecla-igual {
+                background: $color-igual;
+
+                &:hover {
+                    background: oscurecer($color-igual, 10%);
+                }
+            }
+        }
+
+        &.tecla-funcion {
+            background: $color-funcion;
+            color: white;
+
+            &:hover {
+                background: oscurecer($color-funcion, 10%);
+                @include shadow-md();
+            }
+
+            &.tecla-clear {
+                background: $color-texto-claro;
+
+                &:hover {
+                    background: oscurecer($color-texto-claro, 10%);
+                }
+            }
+        }
+    }
+}
+
+// Información
+.calculadora-info {
+    padding: 16px;
+    background: $color-hover;
+    border-radius: 12px;
+    text-align: center;
+
+    .info-texto {
+        margin: 0;
+        font-size: 0.9rem;
+        color: $color-texto-claro;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        i {
+            font-size: 1rem;
+        }
+    }
+}
+
+// Animación de entrada
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calculadora-container {
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Modo oscuro automático
+@media (prefers-color-scheme: dark) {
+    .calculadora-container {
+        background: #1a202c;
+        color: #e2e8f0;
+    }
+
+    .calculadora-header {
+        border-bottom-color: #2d3748;
+
+        .calculadora-titulo {
+            color: #e2e8f0;
+
+            i {
+                color: $color-primario;
+            }
+        }
+
+        .btn-historial {
+            background: #2d3748;
+            border-color: $color-primario;
+            color: $color-primario;
+
+            &:hover {
+                background: $color-primario;
+                color: #1a202c;
+            }
+        }
+    }
+
+    .pantalla-container {
+        background: #2d3748;
+
+        .pantalla-expresion {
+            color: #a0aec0;
+        }
+
+        .pantalla-resultado {
+            color: #e2e8f0;
+        }
+
+        .estado-calculando,
+        .estado-error {
+            background: #4a5568;
+        }
+    }
+
+    .teclado {
+        .tecla {
+            &.tecla-numero {
+                background: #2d3748;
+                color: #e2e8f0;
+                border-color: #4a5568;
+
+                &:hover {
+                    background: #4a5568;
+                    border-color: #718096;
+                }
+            }
+        }
+    }
+
+    .calculadora-info {
+        background: #2d3748;
+
+        .info-texto {
+            color: #a0aec0;
+        }
+    }
+}
+
+// Responsive adicional
+@media (max-height: 700px) {
+    .calculadora-container {
+        padding: 20px;
+    }
+
+    .pantalla-container {
+        padding: 20px;
+        min-height: 100px;
+
+        .pantalla-resultado {
+            font-size: 2.2rem;
+        }
+    }
+
+    .teclado .tecla {
+        height: 60px;
+    }
+}
+
+// Efecto de gradiente en los botones de operador
+.tecla-operador {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
+        border-radius: inherit;
+    }
+}

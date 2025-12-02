@@ -1,0 +1,37 @@
+<nav class="navbar">
+    <!-- Logo/Título -->
+    <div class="navbar-brand">
+        <a href="/" class="logo">
+            <i class="fas fa-calculator"></i>
+            <span class="logo-text">Calculadora</span>
+        </a>
+    </div>
+
+    <!-- Menú de navegación -->
+    <div class="navbar-menu" [class.active]="isMenuOpen">
+        <ul class="nav-links">
+            @for (item of menuItems; track item.label) {
+            <li>
+                <a [href]="item.path" (click)="closeMenuIfMobile()" class="nav-link">
+                    <i class="fas {{item.icon}}"></i>
+                    <span class="nav-label">{{item.label}}</span>
+                    @if (item.badge) {
+                    <span class="nav-badge">{{item.badge}}</span>
+                    }
+                </a>
+            </li>
+            }
+        </ul>
+    </div>
+
+    <!-- Botón hamburguesa para móvil -->
+    <button class="hamburger" (click)="toggleMenu()" [class.active]="isMenuOpen" aria-label="Toggle menu"
+        [attr.aria-expanded]="isMenuOpen">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
+
+    <!-- Overlay para móvil -->
+    <div class="menu-overlay" [class.active]="isMenuOpen" (click)="toggleMenu()"></div>
+</nav>

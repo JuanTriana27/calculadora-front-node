@@ -1,0 +1,232 @@
+// Variables - Colores profesionales
+$primary-color: #2c3e50; // Azul oscuro profesional
+$secondary-color: #3498db; // Azul corporativo
+$hover-color: #2980b9; // Azul para hover
+$text-color: #333333; // Texto principal
+$text-light: #ffffff; // Texto blanco
+$border-color: #ecf0f1; // Color de bordes
+$badge-color: #e74c3c; // Rojo para badges
+$transition: all 0.2s ease;
+
+// Breakpoints
+$tablet: 768px;
+$mobile: 576px;
+
+// Estilos principales
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    background-color: $primary-color;
+    color: $text-light;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 70px;
+    position: relative;
+    z-index: 1000;
+
+    @media (max-width: $tablet) {
+        padding: 0 1rem;
+        height: 65px;
+    }
+}
+
+// Logo/Brand - Simple y profesional
+.navbar-brand {
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: $text-light;
+        font-weight: 600;
+        font-size: 1.4rem;
+
+        i {
+            font-size: 1.6rem;
+            color: $secondary-color;
+        }
+
+        .logo-text {
+            letter-spacing: 0.5px;
+        }
+    }
+}
+
+// Menú de navegación - Limpio
+.navbar-menu {
+    @media (max-width: $tablet) {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 250px;
+        height: 100vh;
+        background-color: $primary-color;
+        transition: right 0.3s ease;
+        padding-top: 80px;
+        z-index: 1001;
+
+        &.active {
+            right: 0;
+        }
+    }
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.5rem;
+
+    @media (max-width: $tablet) {
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+        padding: 0;
+    }
+
+    li {
+        @media (max-width: $tablet) {
+            width: 100%;
+        }
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: $text-light;
+        font-weight: 500;
+        border-radius: 4px;
+        transition: $transition;
+        position: relative;
+
+        @media (max-width: $tablet) {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            justify-content: flex-start;
+        }
+
+        i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-badge {
+            background-color: $badge-color;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+            font-weight: 600;
+        }
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: $secondary-color;
+        }
+    }
+}
+
+// Botón hamburguesa - Simple
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    position: relative;
+    z-index: 1002;
+
+    @media (max-width: $tablet) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hamburger-line {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background-color: $text-light;
+        margin: 3px 0;
+        transition: $transition;
+    }
+
+    &.active {
+        .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+    }
+}
+
+// Overlay para móvil - Simple
+.menu-overlay {
+    display: none;
+
+    @media (max-width: $tablet) {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+
+        &.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}
+
+// Responsive para móviles pequeños
+@media (max-width: $mobile) {
+    .navbar {
+        height: 60px;
+        padding: 0 0.8rem;
+    }
+
+    .navbar-menu {
+        width: 220px;
+    }
+
+    .nav-links .nav-link {
+        padding: 0.9rem 1.2rem;
+    }
+
+    .logo-text {
+        font-size: 1.2rem;
+    }
+}
+
+// Responsive para tablets
+@media (min-width: 769px) and (max-width: 1024px) {
+    .navbar {
+        padding: 0 1.5rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+}

@@ -1,0 +1,21 @@
+/* src/styles.scss - RESET GLOBAL */
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+/* Eliminar márgenes del contenedor que envuelve la app */
+main.container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* O si es cualquier contenedor que envuelva el router-outlet */
+.container {
+    &.py-4 {
+        padding: 0 !important;
+    }
+
+    &>router-outlet+* {
+        display: block;
+        width: 100%;
+    }
+}

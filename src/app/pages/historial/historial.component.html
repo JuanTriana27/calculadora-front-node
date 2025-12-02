@@ -1,0 +1,206 @@
+<div class="historial-container">
+    <!-- Header -->
+    <div class="historial-header">
+        <div class="header-content">
+            <h1 class="historial-title">
+                <i class="fas fa-history"></i>
+                Historial de Operaciones
+            </h1>
+            <p class="historial-subtitle">
+                Registro completo de todas las operaciones realizadas en la calculadora
+            </p>
+        </div>
+
+        <!-- Controles -->
+        <div class="historial-controls">
+            <button class="btn btn-export" (click)="exportToJson()" title="Exportar todos los datos">
+                <i class="fas fa-download"></i>
+                Exportar JSON
+            </button>
+            <button class="btn btn-refresh" (click)="loadHistorial()" [disabled]="isLoading">
+                <i class="fas fa-sync-alt" [class.fa-spin]="isLoading"></i>
+                {{ isLoading ? 'Cargando...' : 'Actualizar' }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading && historialItems.length === 0) {
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando historial...</p>
+    </div>
+    }
+
+    <!-- Error State -->
+    @if (error) {
+    <div class="error-state">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <div class="error-content">
+            <h3>Error al cargar el historial</h3>
+            <p>{{ error }}</p>
+            <button class="btn btn-retry" (click)="loadHistorial()">
+                <i class="fas fa-redo"></i>
+                Reintentar
+            </button>
+        </div>
+    </div>
+    }
+
+    <!-- Empty State -->
+    @if (!isLoading && !error && historialItems.length === 0) {
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div class="empty-content">
+            <h3>No hay operaciones registradas</h3>
+            <p>Realiza algunas operaciones en la calculadora para ver el historial aquí.</p>
+            <a routerLink="/calculadora" class="btn btn-primary">
+                <i class="fas fa-calculator"></i>
+                Ir a Calculadora
+            </a>
+        </div>
+    </div>
+    }
+
+    <!-- Content cuando hay datos -->
+    @if (!isLoading && !error && historialItems.length > 0) {
+    <div class="historial-content">
+        <!-- Estadísticas -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-list-ol"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ totalItems }}</div>
+                    <div class="stat-label">Operaciones totales</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-text">{{ formatFecha(historialItems[0].fecha) }}</div>
+                    <div class="stat-label">Última operación</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number">{{ totalPages }}</div>
+                    <div class="stat-label">Páginas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de operaciones -->
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="historial-table">
+                    <thead>
+                        <tr>
+                            <th width="120">Tipo</th>
+                            <th>Operación</th>
+                            <th width="120">Resultado</th>
+                            <th width="180">Fecha y Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of paginatedItems; track item._id) {
+                        <tr>
+                            <td class="type-cell">
+                                <span class="badge" [class]="getColorTipo(item.tipo)">
+                                    <i class="fas" [class]="getIconoTipo(item.tipo)"></i>
+                                    {{ item.tipo | titlecase }}
+                                </span>
+                            </td>
+                            <td class="operation-cell">
+                                <div class="operation-content">
+                                    <div class="operation-expression">{{ getDescripcion(item) }}</div>
+                                    @if (item.tipo === 'expresion') {
+                                    <div class="operation-type">Expresión compleja</div>
+                                    }
+                                </div>
+                            </td>
+                            <td class="result-cell">
+                                <span class="result-value">{{ item.resultado }}</span>
+                            </td>
+                            <td class="date-cell">
+                                <div class="date-content">
+                                    <i class="fas fa-calendar-alt date-icon"></i>
+                                    <span>{{ formatFecha(item.fecha) }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                <span class="pagination-text">
+                    Mostrando <strong>{{ (currentPage - 1) * itemsPerPage + 1 }}-{{ getEndIndex() }}</strong>
+                    de <strong>{{ totalItems }}</strong> operaciones
+                </span>
+            </div>
+
+            <div class="pagination-controls">
+                <button class="pagination-btn btn-prev" (click)="prevPage()" [disabled]="currentPage === 1">
+                    <i class="fas fa-chevron-left"></i>
+                    Anterior
+                </button>
+
+                <div class="pagination-pages">
+                    @if (currentPage > 3) {
+                    <button class="page-btn" (click)="goToPage(1)">1</button>
+                    @if (currentPage > 4) {
+                    <span class="page-ellipsis">...</span>
+                    }
+                    }
+
+                    @for (page of pageNumbers; track page) {
+                    <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">
+                        {{ page }}
+                    </button>
+                    }
+
+                    @if (currentPage < totalPages - 2) { @if (currentPage < totalPages - 3) { <span
+                        class="page-ellipsis">...</span>
+                        }
+                        <button class="page-btn" (click)="goToPage(totalPages)">{{ totalPages }}</button>
+                        }
+                </div>
+
+                <button class="pagination-btn btn-next" (click)="nextPage()" [disabled]="currentPage === totalPages">
+                    Siguiente
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="pagination-size">
+                <span class="size-label">Mostrar:</span>
+                <select class="size-select" [value]="itemsPerPage"
+                    (change)="itemsPerPage = +$any($event.target).value; currentPage = 1; calculatePagination()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+                <span class="size-text">por página</span>
+            </div>
+        </div>
+    </div>
+    }
+</div>
