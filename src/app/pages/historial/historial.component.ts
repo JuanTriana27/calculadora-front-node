@@ -1,18 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-
-interface HistorialItem {
-    _id: string;
-    tipo: string;
-    expresion?: string;
-    a?: number;
-    b?: number;
-    resultado: number;
-    fecha: string;
-    __v: number;
-}
+import { HistorialService, HistorialItem } from '../../shared/services/historial/historial.service'; // Importar correctamente
 
 @Component({
     selector: 'app-historial',
@@ -23,7 +12,7 @@ interface HistorialItem {
 })
 export class HistorialComponent implements OnInit {
     // Datos y estado
-    historialItems: HistorialItem[] = [];
+    historialItems: HistorialItem[] = []; // Usar la interfaz del servicio
     isLoading = false;
     error: string | null = null;
 
@@ -36,7 +25,8 @@ export class HistorialComponent implements OnInit {
     // Filtros (opcional, para futuras mejoras)
     filterType = 'todos';
 
-    constructor(private http: HttpClient) { }
+    // Inyectar correctamente el servicio
+    constructor(private historialService: HistorialService) { }
 
     ngOnInit(): void {
         this.loadHistorial();
@@ -47,11 +37,9 @@ export class HistorialComponent implements OnInit {
         this.isLoading = true;
         this.error = null;
 
-        const apiUrl = 'https://calcnodeback.onrender.com/api/historial';
-
-        this.http.get<HistorialItem[]>(apiUrl).subscribe({
-            next: (data) => {
-                // Ordenar por fecha más reciente primero
+        // Tipar correctamente la respuesta
+        this.historialService.getHistorial().subscribe({
+            next: (data: HistorialItem[]) => {
                 this.historialItems = data.sort((a, b) =>
                     new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
                 );
@@ -59,14 +47,15 @@ export class HistorialComponent implements OnInit {
                 this.calculatePagination();
                 this.isLoading = false;
             },
-            error: (err) => {
+            error: (err: Error) => {
                 console.error('Error al cargar historial:', err);
-                this.error = 'No se pudo cargar el historial. Intenta nuevamente.';
+                this.error = err.message || 'No se pudo cargar el historial.';
                 this.isLoading = false;
             }
         });
     }
 
+    // Resto del código igual...
     // Formatear fecha
     formatFecha(fechaString: string): string {
         const fecha = new Date(fechaString);

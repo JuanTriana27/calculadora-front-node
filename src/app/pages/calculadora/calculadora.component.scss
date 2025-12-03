@@ -1,23 +1,19 @@
-// Variables de color minimalistas
-$color-primario: #3a86ff; // Azul moderno
-$color-secundario: #8338ec; // Púrpura elegante
-$color-fondo: #ffffff; // Blanco
-$color-texto: #2d3748; // Gris oscuro
-$color-texto-claro: #718096; // Gris medio
-$color-borde: #e2e8f0; // Gris claro
-$color-hover: #f7fafc; // Gris muy claro para hover
-$color-operador: #ff006e; // Rosa para operadores
-$color-igual: #fb5607; // Naranja para igual
-$color-funcion: #8ac926; // Verde para funciones
+// Colores claros y profesionales
+$color-fondo: #ffffff;
+$color-texto: #333333;
+$color-texto-claro: #666666;
+$color-borde: #e0e0e0;
+$color-sombra: rgba(0, 0, 0, 0.1);
 
-// Funciones para manejar colores
-@function oscurecer($color, $porcentaje) {
-    @return mix(#000, $color, $porcentaje);
-}
-
-@function aclarar($color, $porcentaje) {
-    @return mix(#fff, $color, $porcentaje);
-}
+$color-numero: #f5f5f5;
+$color-numero-hover: #e8e8e8;
+$color-operador: #4a90e2;
+$color-operador-hover: #3a7bc8;
+$color-funcion: #95a5a6;
+$color-funcion-hover: #7f8c8d;
+$color-igual: #e74c3c;
+$color-igual-hover: #c0392b;
+$color-error: #ff6b6b;
 
 // Mixins
 @mixin flex-center {
@@ -27,164 +23,97 @@ $color-funcion: #8ac926; // Verde para funciones
 }
 
 @mixin transition($prop: all) {
-    transition: $prop 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: $prop 0.2s ease;
 }
 
-@mixin shadow-sm {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+@mixin sombra-suave {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-@mixin shadow-md {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-@mixin shadow-lg {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+@mixin sombra-boton {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 // Container principal
 .calculadora-container {
     max-width: 400px;
+    width: 100%;
     margin: 0 auto;
-    padding: 24px;
+    padding: 20px;
     background: $color-fondo;
-    border-radius: 24px;
-    @include shadow-lg();
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    border-radius: 20px;
+    @include sombra-suave();
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
     @media (max-width: 480px) {
-        padding: 20px;
-        border-radius: 20px;
-        max-width: 100%;
-    }
-}
-
-// Header
-.calculadora-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 28px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid $color-borde;
-
-    .header-left {
-        .calculadora-titulo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: $color-texto;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            i {
-                color: $color-primario;
-                font-size: 1.4rem;
-            }
-        }
+        padding: 15px;
+        border-radius: 15px;
+        max-width: 95%;
     }
 
-    .header-right {
-        .btn-historial {
-            @include flex-center();
-            gap: 8px;
-            padding: 10px 16px;
-            background: $color-fondo;
-            border: 2px solid $color-primario;
-            border-radius: 12px;
-            color: $color-primario;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            @include transition();
-
-            &:hover {
-                background: $color-primario;
-                color: white;
-                transform: translateY(-1px);
-                @include shadow-md();
-            }
-
-            .btn-text {
-                @media (max-width: 480px) {
-                    display: none;
-                }
-            }
-
-            i {
-                font-size: 1rem;
-            }
-        }
+    @media (max-width: 350px) {
+        padding: 12px;
     }
 }
 
 // Pantalla
-.pantalla-container {
-    background: $color-hover;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 28px;
-    position: relative;
+.pantalla {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
     min-height: 120px;
+    position: relative;
     overflow: hidden;
+    border: 1px solid $color-borde;
 
-    .pantalla-expresion {
-        font-size: 1.1rem;
+    .expresion {
+        font-size: 18px;
         color: $color-texto-claro;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         min-height: 24px;
         word-break: break-all;
-        font-weight: 500;
+        font-weight: 400;
 
         &.error {
-            color: $color-operador;
+            color: $color-error;
         }
     }
 
-    .pantalla-resultado {
-        font-size: 2.8rem;
-        font-weight: 700;
+    .resultado {
+        font-size: 36px;
+        font-weight: 600;
         color: $color-texto;
-        line-height: 1;
-        word-break: break-all;
         text-align: right;
+        word-break: break-all;
+        line-height: 1.2;
 
         &.error {
-            color: $color-operador;
+            color: $color-error;
         }
 
         @media (max-width: 480px) {
-            font-size: 2.2rem;
+            font-size: 32px;
+        }
+
+        @media (max-width: 350px) {
+            font-size: 28px;
         }
     }
 
-    // Estados
-    .estado-calculando,
-    .estado-error {
+    .calculando {
         position: absolute;
-        top: 16px;
-        left: 24px;
+        bottom: 10px;
+        left: 20px;
         @include flex-center();
         gap: 8px;
-        font-size: 0.9rem;
+        font-size: 14px;
+        color: $color-operador;
         font-weight: 500;
-        padding: 6px 12px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.9);
-        @include shadow-sm();
 
         i {
-            font-size: 0.9rem;
+            font-size: 14px;
         }
-    }
-
-    .estado-calculando {
-        color: $color-primario;
-    }
-
-    .estado-error {
-        color: $color-operador;
     }
 }
 
@@ -192,150 +121,144 @@ $color-funcion: #8ac926; // Verde para funciones
 .teclado {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 10px;
+    margin-bottom: 20px;
 
     .fila {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
+        gap: 10px;
 
-        @media (max-width: 480px) {
-            gap: 10px;
+        &:last-child {
+            grid-template-columns: 2fr 1fr 1fr;
+        }
+
+        @media (max-width: 350px) {
+            gap: 8px;
         }
     }
 
-    .tecla {
+    .btn {
         @include flex-center();
-        height: 68px;
+        height: 70px;
         border: none;
-        border-radius: 16px;
+        border-radius: 12px;
         cursor: pointer;
+        font-size: 22px;
+        font-weight: 500;
         @include transition();
         user-select: none;
-        position: relative;
-        overflow: hidden;
 
-        // Efecto de presión
         &:active {
             transform: scale(0.95);
         }
 
-        // Efecto de ripple
-        &::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
+        @media (max-width: 480px) {
+            height: 65px;
+            font-size: 20px;
         }
 
-        &:active::after {
-            width: 150px;
-            height: 150px;
+        @media (max-width: 350px) {
+            height: 60px;
+            font-size: 18px;
         }
 
-        .tecla-texto {
-            font-size: 1.4rem;
-            font-weight: 600;
-            position: relative;
-            z-index: 1;
-
-            @media (max-width: 480px) {
-                font-size: 1.2rem;
-            }
-        }
-
-        i {
-            font-size: 1.2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        // Tipos de teclas
-        &.tecla-numero {
-            background: $color-fondo;
+        // Tipos de botones
+        &.btn-numero {
+            background: $color-numero;
             color: $color-texto;
-            border: 2px solid $color-borde;
+            border: 1px solid $color-borde;
 
             &:hover {
-                background: $color-hover;
-                border-color: aclarar($color-borde, 30%);
-                @include shadow-md();
+                background: $color-numero-hover;
+                @include sombra-boton();
             }
 
-            &.tecla-cero {
+            &.btn-cero {
                 grid-column: span 2;
             }
         }
 
-        &.tecla-operador {
+        &.btn-operador {
             background: $color-operador;
             color: white;
 
             &:hover {
-                background: oscurecer($color-operador, 10%);
-                @include shadow-md();
-            }
-
-            &.tecla-igual {
-                background: $color-igual;
-
-                &:hover {
-                    background: oscurecer($color-igual, 10%);
-                }
+                background: $color-operador-hover;
+                @include sombra-boton();
             }
         }
 
-        &.tecla-funcion {
+        &.btn-funcion {
             background: $color-funcion;
+            color: white;
+            font-size: 18px;
+
+            &:hover {
+                background: $color-funcion-hover;
+                @include sombra-boton();
+            }
+
+            &.btn-clear {
+                font-size: 20px;
+            }
+        }
+
+        &.btn-igual {
+            background: $color-igual;
             color: white;
 
             &:hover {
-                background: oscurecer($color-funcion, 10%);
-                @include shadow-md();
-            }
-
-            &.tecla-clear {
-                background: $color-texto-claro;
-
-                &:hover {
-                    background: oscurecer($color-texto-claro, 10%);
-                }
+                background: $color-igual-hover;
+                @include sombra-boton();
             }
         }
     }
 }
 
-// Información
-.calculadora-info {
-    padding: 16px;
-    background: $color-hover;
-    border-radius: 12px;
+// Botón de historial
+.historial-btn-container {
     text-align: center;
+    padding-top: 15px;
+    border-top: 1px solid $color-borde;
 
-    .info-texto {
-        margin: 0;
-        font-size: 0.9rem;
-        color: $color-texto-claro;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
+    .btn-historial {
+        @include flex-center();
+        gap: 10px;
+        padding: 12px 24px;
+        background: transparent;
+        border: 2px solid $color-operador;
+        border-radius: 10px;
+        color: $color-operador;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        @include transition();
+
+        &:hover {
+            background: $color-operador;
+            color: white;
+            transform: translateY(-2px);
+            @include sombra-boton();
+        }
 
         i {
-            font-size: 1rem;
+            font-size: 16px;
+        }
+
+        @media (max-width: 480px) {
+            padding: 10px 20px;
+            font-size: 15px;
+
+            span {
+                font-size: 15px;
+            }
         }
     }
 }
 
 // Animación de entrada
-@keyframes slideUp {
+@keyframes aparecer {
     from {
         opacity: 0;
         transform: translateY(20px);
@@ -348,112 +271,50 @@ $color-funcion: #8ac926; // Verde para funciones
 }
 
 .calculadora-container {
-    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: aparecer 0.3s ease-out;
 }
 
-// Modo oscuro automático
-@media (prefers-color-scheme: dark) {
+// Efecto de presión en botones
+.btn:active {
+    transition: transform 0.1s ease;
+}
+
+// Responsive para tablets
+@media (min-width: 768px) and (max-width: 1024px) {
     .calculadora-container {
-        background: #1a202c;
-        color: #e2e8f0;
+        max-width: 450px;
+        padding: 25px;
     }
 
-    .calculadora-header {
-        border-bottom-color: #2d3748;
-
-        .calculadora-titulo {
-            color: #e2e8f0;
-
-            i {
-                color: $color-primario;
-            }
-        }
-
-        .btn-historial {
-            background: #2d3748;
-            border-color: $color-primario;
-            color: $color-primario;
-
-            &:hover {
-                background: $color-primario;
-                color: #1a202c;
-            }
-        }
+    .teclado .btn {
+        height: 75px;
+        font-size: 24px;
     }
 
-    .pantalla-container {
-        background: #2d3748;
-
-        .pantalla-expresion {
-            color: #a0aec0;
+    .pantalla {
+        .resultado {
+            font-size: 40px;
         }
 
-        .pantalla-resultado {
-            color: #e2e8f0;
-        }
-
-        .estado-calculando,
-        .estado-error {
-            background: #4a5568;
-        }
-    }
-
-    .teclado {
-        .tecla {
-            &.tecla-numero {
-                background: #2d3748;
-                color: #e2e8f0;
-                border-color: #4a5568;
-
-                &:hover {
-                    background: #4a5568;
-                    border-color: #718096;
-                }
-            }
-        }
-    }
-
-    .calculadora-info {
-        background: #2d3748;
-
-        .info-texto {
-            color: #a0aec0;
+        .expresion {
+            font-size: 20px;
         }
     }
 }
 
-// Responsive adicional
-@media (max-height: 700px) {
+// Para pantallas grandes
+@media (min-width: 1025px) {
     .calculadora-container {
-        padding: 20px;
+        max-width: 420px;
     }
 
-    .pantalla-container {
-        padding: 20px;
-        min-height: 100px;
-
-        .pantalla-resultado {
-            font-size: 2.2rem;
+    .btn {
+        &:hover {
+            transform: translateY(-2px);
         }
-    }
 
-    .teclado .tecla {
-        height: 60px;
-    }
-}
-
-// Efecto de gradiente en los botones de operador
-.tecla-operador {
-    position: relative;
-
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 100%);
-        border-radius: inherit;
+        &:active {
+            transform: translateY(0) scale(0.95);
+        }
     }
 }

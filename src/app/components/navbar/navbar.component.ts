@@ -29,12 +29,6 @@ export class NavbarComponent {
             icon: 'fa-history',
             label: 'Historial',
             badge: null
-        },
-        {
-            path: '/endpoints',
-            icon: 'fa-code',
-            label: 'Endpoints',
-            badge: null
         }
     ];
 

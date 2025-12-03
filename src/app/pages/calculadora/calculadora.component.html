@@ -1,130 +1,106 @@
 <div class="calculadora-container">
-    <!-- Header simplificado -->
-    <div class="calculadora-header">
-        <div class="header-left">
-            <h1 class="calculadora-titulo">
-                <i class="fas fa-calculator"></i>
-                Calculadora
-            </h1>
-        </div>
-        <div class="header-right">
-            <button class="btn-historial" routerLink="/historial" title="Ver historial completo">
-                <i class="fas fa-history"></i>
-                <span class="btn-text">Historial</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Pantalla minimalista -->
-    <div class="pantalla-container">
-        <div class="pantalla-expresion" [class.error]="errorMessage">
+    <!-- Pantalla -->
+    <div class="pantalla">
+        <div class="expresion" [class.error]="errorMessage">
             {{ expression || '0' }}
         </div>
-        <div class="pantalla-resultado" [class.error]="errorMessage">
+        <div class="resultado" [class.error]="errorMessage">
             {{ getDisplayFormatted() }}
         </div>
 
-        <!-- Estados -->
         @if (isCalculating) {
-        <div class="estado-calculando">
+        <div class="calculando">
             <i class="fas fa-spinner fa-spin"></i>
             <span>Calculando...</span>
         </div>
         }
-
-        @if (errorMessage) {
-        <div class="estado-error">
-            <i class="fas fa-exclamation-circle"></i>
-            <span>{{ errorMessage }}</span>
-        </div>
-        }
     </div>
 
-    <!-- Teclado minimalista -->
+    <!-- Teclado -->
     <div class="teclado">
-        <!-- Fila 1 -->
+        <!-- Primera fila - Funciones -->
         <div class="fila">
-            <button class="tecla tecla-funcion tecla-clear" (click)="clear()" title="Limpiar todo">
-                <span class="tecla-texto">AC</span>
+            <button class="btn btn-funcion btn-clear" (click)="clear()" title="Limpiar">
+                AC
             </button>
-            <button class="tecla tecla-funcion" (click)="deleteLast()" title="Borrar último">
+            <button class="btn btn-funcion" (click)="deleteLast()" title="Borrar último">
                 <i class="fas fa-backspace"></i>
             </button>
-            <button class="tecla tecla-funcion" (click)="porcentaje()" title="Porcentaje">
-                <span class="tecla-texto">%</span>
+            <button class="btn btn-funcion" (click)="porcentaje()" title="Porcentaje">
+                %
             </button>
-            <button class="tecla tecla-operador" (click)="appendOperator('÷')">
-                <span class="tecla-texto">÷</span>
-            </button>
-        </div>
-
-        <!-- Fila 2 -->
-        <div class="fila">
-            <button class="tecla tecla-numero" (click)="appendNumber('7')">
-                <span class="tecla-texto">7</span>
-            </button>
-            <button class="tecla tecla-numero" (click)="appendNumber('8')">
-                <span class="tecla-texto">8</span>
-            </button>
-            <button class="tecla tecla-numero" (click)="appendNumber('9')">
-                <span class="tecla-texto">9</span>
-            </button>
-            <button class="tecla tecla-operador" (click)="appendOperator('×')">
-                <span class="tecla-texto">×</span>
+            <button class="btn btn-operador" (click)="appendOperator('÷')" title="Dividir">
+                ÷
             </button>
         </div>
 
-        <!-- Fila 3 -->
+        <!-- Segunda fila -->
         <div class="fila">
-            <button class="tecla tecla-numero" (click)="appendNumber('4')">
-                <span class="tecla-texto">4</span>
+            <button class="btn btn-numero" (click)="appendNumber('7')">
+                7
             </button>
-            <button class="tecla tecla-numero" (click)="appendNumber('5')">
-                <span class="tecla-texto">5</span>
+            <button class="btn btn-numero" (click)="appendNumber('8')">
+                8
             </button>
-            <button class="tecla tecla-numero" (click)="appendNumber('6')">
-                <span class="tecla-texto">6</span>
+            <button class="btn btn-numero" (click)="appendNumber('9')">
+                9
             </button>
-            <button class="tecla tecla-operador" (click)="appendOperator('-')">
-                <span class="tecla-texto">−</span>
+            <button class="btn btn-operador" (click)="appendOperator('×')" title="Multiplicar">
+                ×
             </button>
         </div>
 
-        <!-- Fila 4 -->
+        <!-- Tercera fila -->
         <div class="fila">
-            <button class="tecla tecla-numero" (click)="appendNumber('1')">
-                <span class="tecla-texto">1</span>
+            <button class="btn btn-numero" (click)="appendNumber('4')">
+                4
             </button>
-            <button class="tecla tecla-numero" (click)="appendNumber('2')">
-                <span class="tecla-texto">2</span>
+            <button class="btn btn-numero" (click)="appendNumber('5')">
+                5
             </button>
-            <button class="tecla tecla-numero" (click)="appendNumber('3')">
-                <span class="tecla-texto">3</span>
+            <button class="btn btn-numero" (click)="appendNumber('6')">
+                6
             </button>
-            <button class="tecla tecla-operador" (click)="appendOperator('+')">
-                <span class="tecla-texto">+</span>
+            <button class="btn btn-operador" (click)="appendOperator('-')" title="Restar">
+                -
             </button>
         </div>
 
-        <!-- Fila 5 -->
+        <!-- Cuarta fila -->
         <div class="fila">
-            <button class="tecla tecla-numero tecla-cero" (click)="appendNumber('0')">
-                <span class="tecla-texto">0</span>
+            <button class="btn btn-numero" (click)="appendNumber('1')">
+                1
             </button>
-            <button class="tecla tecla-numero" (click)="appendDecimal()" title="Punto decimal">
-                <span class="tecla-texto">.</span>
+            <button class="btn btn-numero" (click)="appendNumber('2')">
+                2
             </button>
-            <button class="tecla tecla-operador tecla-igual" (click)="calculate()">
-                <span class="tecla-texto">=</span>
+            <button class="btn btn-numero" (click)="appendNumber('3')">
+                3
+            </button>
+            <button class="btn btn-operador" (click)="appendOperator('+')" title="Sumar">
+                +
+            </button>
+        </div>
+
+        <!-- Quinta fila -->
+        <div class="fila">
+            <button class="btn btn-numero btn-cero" (click)="appendNumber('0')">
+                0
+            </button>
+            <button class="btn btn-numero" (click)="appendDecimal()" title="Punto decimal">
+                .
+            </button>
+            <button class="btn btn-igual" (click)="calculate()" title="Calcular">
+                =
             </button>
         </div>
     </div>
 
-    <!-- Info mínima -->
-    <div class="calculadora-info">
-        <p class="info-texto">
-            <i class="fas fa-keyboard"></i>
-            Usa el teclado para operar más rápido
-        </p>
+    <!-- Botón de historial -->
+    <div class="historial-btn-container">
+        <button class="btn-historial" routerLink="/historial">
+            <i class="fas fa-history"></i>
+            <span>Ver Historial</span>
+        </button>
     </div>
 </div>

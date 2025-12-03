@@ -19,8 +19,8 @@ export interface HistorialItem {
     providedIn: 'root'
 })
 export class HistorialService {
-    private apiUrl = 'https://calcnodeback.onrender.com/api/historial';
-    //private apiUrl = `${environment.apiUrl}/historial`;
+    // private apiUrl = 'https://calcnodeback.onrender.com/api/historial';
+    private apiUrl = `${environment.apiUrl}/historial`;
 
     constructor(private http: HttpClient) {
         console.log('HistorialService - Environment production:', environment.production);
@@ -35,10 +35,9 @@ export class HistorialService {
     getHistorial(): Observable<HistorialItem[]> {
         console.log('🔍 getHistorial() llamado. URL:', this.apiUrl);
 
-        // QUITA los headers por ahora - pueden causar preflight CORS
-        // const headers = new HttpHeaders({
-        //     'Content-Type': 'application/json'
-        // });
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
 
         console.log('📤 Haciendo petición GET a:', this.apiUrl);
 
